@@ -5,6 +5,7 @@ describe('a CreateThread entities', () => {
     // Arrange
     const payload = {
       title: 'abc',
+      body: 'abc',
     };
 
     // Action and Assert
@@ -16,6 +17,7 @@ describe('a CreateThread entities', () => {
     const payload = {
       title: 123,
       body: true,
+      owner: [],
     };
     // Action and Assert
     expect(() => new CreateThread(payload)).toThrowError('CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
