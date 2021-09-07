@@ -25,7 +25,7 @@ const ThreadsTableTestHelper = {
     const result = await pool.query(query);
     return result.rows;
   },
-  async findThreadsByOwner(owner) {
+  async getThreadByOwner(owner) {
     const query = {
       text: 'SELECT * FROM threads WHERE owner = $1',
       values: [owner],
