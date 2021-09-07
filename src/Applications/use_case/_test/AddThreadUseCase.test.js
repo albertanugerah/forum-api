@@ -1,4 +1,3 @@
-const { use } = require('bcrypt/promises');
 const CreatedThread = require('../../../Domains/threads/entities/CreatedThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const AddThreadUseCase = require('../AddThreadUseCase');
