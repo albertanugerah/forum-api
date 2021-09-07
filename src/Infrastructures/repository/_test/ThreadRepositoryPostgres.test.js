@@ -5,7 +5,6 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CreateThread = require('../../../Domains/threads/entities/CreateThread');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const CreatedThread = require('../../../Domains/threads/entities/CreatedThread');
 
 describe('ThreadRepositoryPostgres', () => {
@@ -156,7 +155,7 @@ describe('ThreadRepositoryPostgres', () => {
       await UsersTableTestHelper.addUser({
         id: owner,
         username: 'dicoding',
-      });// memasukan user baru dengan username dicoding
+      });
       await ThreadsTableTestHelper.addThread(id, {
         title: 'ini title',
         body: 'ini body',

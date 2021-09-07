@@ -5,17 +5,17 @@ const CreateThread = require('../../../Domains/threads/entities/CreateThread');
 
 describe('AddThreadUseCase', () => {
   it('should orchestrating the add thread action correctly', async () => {
-    // Arramge
+    // Arrange
+    const owner = 'user-123';
     const useCasePayload = {
       title: 'ini title',
       body: 'ini Body',
-      owner: 'user-123',
     };
 
     const expectedCreatedThread = new CreatedThread({
       id: 'thread-123',
       title: 'ini title',
-      owner: 'user-123',
+      owner,
     });
 
     /** creating dependency of use case */
