@@ -1,7 +1,6 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
-const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CreateThread = require('../../../Domains/threads/entities/CreateThread');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
