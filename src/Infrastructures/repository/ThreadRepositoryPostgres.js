@@ -2,7 +2,6 @@ const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const CreatedThread = require('../../Domains/threads/entities/CreatedThread');
-const InvariantError = require('../../Commons/exceptions/InvariantError');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
   constructor(pool, idGenerator) {
@@ -27,24 +26,6 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     return new CreatedThread({ ...result.rows[0] });
   }
 
-  async verifyThreadOwner(id, owner) {
-    const query = {
-      text: 'SELECT * FROM threads WHERE id = $1',
-      values: [id],
-    };
-    const result = await this._pool.query(query);
-
-    if (!result.rows.length) {
-      throw new NotFoundError('Resource yang Anda minta tidak ditemukan');
-    }
-
-    const thread = result.rows[0];
-
-    if (thread.owner !== owner) {
-      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
-    }
-  }
-
   async getThreadById(id) {
     const query = {
       text: 'SELECT threads.*,users.username as username FROM threads INNER JOIN users ON threads.owner = users.id WHERE threads.id = $1',
@@ -57,7 +38,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       throw new NotFoundError('thread tidak ditemukan');
     }
 
-    return result.rows[0];
+    return result.rows;
   }
 }
 

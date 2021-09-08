@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const createServer = require('../src/Infrastructures/http/createServer');
 const container = require('../src/Infrastructures/container');
 

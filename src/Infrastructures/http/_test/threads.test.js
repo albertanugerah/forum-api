@@ -1,6 +1,5 @@
 const createServer = require('../createServer');
 const container = require('../../container');
-const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 const ThreadTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const pool = require('../../database/postgres/pool');
@@ -19,7 +18,7 @@ describe('/threads endpoint', () => {
     it('should response 201 and added thread', async () => {
       // Arrange
       const owner = 'user-123';
-      const payload = {
+      const requestPayload = {
         title: 'title',
         body: 'dummy body',
       };
@@ -30,9 +29,9 @@ describe('/threads endpoint', () => {
       const response = await server.inject({
         method: 'POST',
         url: '/threads',
-        payload,
+        payload: requestPayload,
         auth: {
-          strategy: 'forumapi_jwt',
+          strategy: 'forum-api_jwt',
           credentials: {
             id: owner,
           },
@@ -42,8 +41,7 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
-      expect(responseJson.data.addedThreadd).toBeDefined();
-      expect(responseJson.data.addedThread.title).toEqual(payload.title);
+      expect(responseJson.data.addedThread).toBeDefined();
     });
   });
 });
