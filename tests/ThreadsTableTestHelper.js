@@ -23,15 +23,6 @@ const ThreadsTableTestHelper = {
     const result = await pool.query(query);
     return result.rows;
   },
-  async getThreadByOwner(owner) {
-    const query = {
-      text: 'SELECT * FROM threads WHERE owner = $1',
-      values: [owner],
-    };
-
-    const result = await pool.query(query);
-    return result.rows;
-  },
   async cleanTable() {
     await pool.query('DELETE FROM threads WHERE 1=1');
   },
