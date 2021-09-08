@@ -33,7 +33,7 @@ describe('AddCommentUseCase', () => {
     });
 
     const addedComment = await getAddCommentUseCase
-      .addCommentByThreadId(useCasePayload, { owner, threadId });
+      .execute(useCasePayload, { owner, threadId });
 
     expect(addedComment).toStrictEqual(expectedAddedComment);
     expect(mockCommentRepository.addCommentByThreadId)
