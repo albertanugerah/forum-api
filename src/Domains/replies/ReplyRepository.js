@@ -7,7 +7,7 @@ class ReplyRepository {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  async getReplyOwner(owner) {
+  async getReplyOwner(id) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 

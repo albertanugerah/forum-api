@@ -74,4 +74,52 @@ describe('ReplyRepositoryPostgres', () => {
       });
     });
   });
+
+  describe('getReplyOwner function', () => {
+    it('should return replies owner from database', async () => {
+      const owner = 'user-123';
+      const commentId = 'comment-123';
+      const threadId = 'thread-123';
+      const replyId = 'reply-123';
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      await UsersTableTestHelper.addUser({ id: owner });
+      await ThreadTableTestHelper.addThread(threadId, {}, owner);
+      await CommentsTableTestHelper.addComment(commentId, {}, owner, threadId);
+      await RepliesTableTestHelper.addReply(replyId, {}, owner, commentId);
+
+      const reply = await replyRepositoryPostgres.getReplyOwner(replyId);
+
+      await expect(replyRepositoryPostgres.getReplyOwner(replyId))
+        .resolves.not.toThrowError(NotFoundError);
+      expect(reply).toEqual(owner);
+    });
+    it('should throw NotFoundError when reply not exist', async () => {
+      const replyRepository = new ReplyRepositoryPostgres(pool, {});
+
+      await expect(replyRepository.getReplyOwner('reply-123')).rejects.toThrowError(NotFoundError);
+    });
+  });
+  describe('deleteReplyById function', () => {
+    it('should delete replies by id from database when existed', async () => {
+      const owner = 'user-123';
+      const commentId = 'comment-123';
+      const threadId = 'thread-123';
+      const replyId = 'reply-123';
+      const replyRepository = new ReplyRepositoryPostgres(pool, {});
+
+      await UsersTableTestHelper.addUser({ id: owner });
+      await ThreadTableTestHelper.addThread(threadId, {}, owner);
+      await CommentsTableTestHelper.addComment(commentId, {}, owner, threadId);
+      await RepliesTableTestHelper.addReply(replyId, {}, owner, commentId);
+
+      await expect(replyRepository.deleteReplyById(replyId))
+        .resolves.not.toThrowError(NotFoundError);
+    });
+    it('should throw NotFoundError if replies not existed', async () => {
+      const replyRepository = new ReplyRepositoryPostgres(pool, {});
+      await expect(replyRepository.deleteReplyById('reply-123'))
+        .rejects.toThrowError(NotFoundError);
+    });
+  });
 });
