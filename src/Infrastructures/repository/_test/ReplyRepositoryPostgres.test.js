@@ -5,6 +5,7 @@ const pool = require('../../database/postgres/pool');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
 const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AddedReply = require('../../../Domains/replies/entities/AddedReply');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('ReplyRepositoryPostgres', () => {
   afterEach(async () => {
@@ -46,6 +47,31 @@ describe('ReplyRepositoryPostgres', () => {
 
       expect(reply).toHaveLength(1);
       expect(reply[0].content).toBe(payload.content);
+    });
+
+    describe('getReplyByCommentId function', () => {
+      it('should return replies by comment id from database and it\'s owner username', async () => {
+        const owner = 'user-123';
+        const commentId = 'comment-123';
+        const threadId = 'thread-123';
+        const payload = {
+          content: 'isi reply',
+        };
+        const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+        await UsersTableTestHelper.addUser({ id: owner });
+        await ThreadTableTestHelper.addThread(threadId, {}, owner);
+        await CommentsTableTestHelper.addComment(commentId, {}, owner, threadId);
+        await RepliesTableTestHelper.addReply('reply-123', payload, owner, commentId);
+
+        const reply = await replyRepositoryPostgres.getReplyByCommentId(commentId);
+
+        await expect(replyRepositoryPostgres.getReplyByCommentId(commentId))
+          .resolves.not.toThrowError(NotFoundError);
+        expect(reply).toHaveLength(1);
+        expect(reply[0]).toHaveProperty('username');
+        expect(reply[0].content).toBe(payload.content);
+      });
     });
   });
 });

@@ -4,6 +4,7 @@ const createServer = require('../createServer');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper.');
+const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
 
 describe('/threads endpoint', () => {
   afterAll(async () => {
@@ -11,6 +12,7 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
+    await RepliesTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
     await ThreadTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
@@ -48,13 +50,15 @@ describe('/threads endpoint', () => {
   });
   describe('when GET /threads/{threadId}', () => {
     it('should response 200', async () => {
-      const owner = 'user-234';
-      const threadId = 'thread-234';
+      const owner = 'user-123';
+      const threadId = 'thread-123';
 
       await UsersTableTestHelper.addUser({ id: owner });
       await ThreadTableTestHelper.addThread(threadId, {}, owner);
       await CommentsTableTestHelper.addComment('comment-123', {}, owner, threadId);
-      await CommentsTableTestHelper.addComment('comment-453', {}, owner, threadId, true);
+      await CommentsTableTestHelper.addComment('comment-456', {}, owner, threadId, true);
+      await RepliesTableTestHelper.addReply('reply-123', {}, owner, 'comment-123');
+      await RepliesTableTestHelper.addReply('reply-456', {}, owner, 'comment-123', true);
 
       const server = await createServer(container);
       const response = await server.inject({
@@ -73,6 +77,7 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread.comments[0].content).toBeDefined();
       expect(responseJson.data.thread.comments[0].username).toBeDefined();
       expect(responseJson.data.thread.comments[0].date).toBeDefined();
+      expect(responseJson.data.thread.comments[0].replies).toBeDefined();
     });
   });
 });
