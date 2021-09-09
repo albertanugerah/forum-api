@@ -11,11 +11,11 @@ describe('AddedComment entities', () => {
   it('should throw error when payload not contain needed property', () => {
     const payload = {
       id: 'comment-123',
-      content: '',
+      content: 321,
       owner: 134,
     };
 
-    expect(() => new AddedComment(payload)).toThrowError('ADDED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddedComment(payload)).toThrowError('ADDED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should AddedComment object correctly', () => {
