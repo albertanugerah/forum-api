@@ -6,6 +6,7 @@ const AddComment = require('../../../Domains/comments/entities/AddComment');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const InvariantError = require('../../../Commons/exceptions/InvariantError');
 
 describe('CommentRepositoryPostgres', () => {
   afterEach(async () => {
@@ -47,7 +48,7 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
-  describe('getOwnerByCommentId function', () => {
+  describe('getOwnerByCommentId method', () => {
     it('should return comment owner if exist', async () => {
       const commentRepository = new CommentRepositoryPostgres(pool, {});
       const owner = 'user-123';
@@ -95,6 +96,26 @@ describe('CommentRepositoryPostgres', () => {
       const commentId = 'comment-123';
       await expect(commentRepositoryPostgres.deleteCommentById(commentId))
         .rejects.toThrow(NotFoundError);
+    });
+  });
+
+  describe('getCommentByThreadId function', () => {
+    it('should return getCommentByThreadId ', async () => {
+      const owner = 'user-123';
+      const threadId = 'thread-123';
+      const commentId = 'comment-123';
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      await UsersTableTestHelper.addUser({ id: owner });
+      await ThreadTableTestHelper.addThread(threadId, {}, owner);
+      await CommentsTableTestHelper.addComment(commentId, {}, owner, threadId);
+
+      const getCommentByThreadId = await commentRepository.getCommentByThreadId(threadId);
+
+      await expect(commentRepository.getCommentByThreadId(threadId))
+        .resolves.not.toThrowError(InvariantError);
+      expect(getCommentByThreadId).toHaveLength(1);
+      expect(getCommentByThreadId[0]).toHaveProperty('username');
     });
   });
 });
