@@ -3,40 +3,36 @@ const DetailThread = require('../DetailThread');
 describe('DetailThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     const payload = {
-      username: 'johndoe',
-      date: '2021-08-08T07:59:18.982Z',
+      title: 'abc',
+      body: 'sebuah body thread',
     };
-
     expect(() => new DetailThread(payload)).toThrowError('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
-
   it('should throw error when payload did not meet data type specification', () => {
     const payload = {
-      id: 123,
-      username: 'johndoe',
-      date: '2021-08-08T07:22:33.555Z',
-      replies: {},
-      content: 'sebuah comment',
-      isDeleted: 'true',
+      id: 1221,
+      title: 'sebuah thread',
+      body: 'sebuah body thread',
+      date: 1213134,
+      username: 'dicoding',
     };
     expect(() => new DetailThread(payload)).toThrowError('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
-
-  it('should create detailComment object correctly', () => {
+  it('should create detailThread object correctly', () => {
     const payload = {
-      id: 'comment-_pby2_tmXV6bcvcdev8xk',
-      username: 'johndoe',
-      date: '2021-08-08T07:22:33.555Z',
-      content: 'sebuah comment',
-      isDeleted: false,
+      id: 'abc',
+      title: 'sebuah thread',
+      body: 'sebuah body thread',
+      date: '2021-08-08T07:19:09.775Z',
+      username: 'dicoding',
     };
     const {
-      id, username, date, content,
+      id, title, body, date, username, comments,
     } = new DetailThread(payload);
-
     expect(id).toEqual(payload.id);
-    expect(username).toEqual(payload.username);
+    expect(title).toEqual(payload.title);
+    expect(body).toEqual(payload.body);
     expect(date).toEqual(payload.date);
-    expect(content).toEqual(payload.content);
+    expect(username).toEqual(payload.username);
   });
 });

@@ -1,7 +1,7 @@
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
-const DetailThread = require('../../Domains/threads/entities/DetailThread');
+const DetailComment = require('../../Domains/comments/entities/DetailComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -57,7 +57,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
-    return result.rows.map((payload) => (new DetailThread({
+    return result.rows.map((payload) => (new DetailComment({
       ...payload,
       date: new Date(payload.date).toISOString(),
       isDeleted: payload.is_deleted,

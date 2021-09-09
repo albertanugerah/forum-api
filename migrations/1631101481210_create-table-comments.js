@@ -1,7 +1,4 @@
 /* eslint-disable camelcase */
-
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
   pgm.createTable('comments', {
     id: {
@@ -33,12 +30,12 @@ exports.up = (pgm) => {
       default: 'false',
     },
   });
-  // menambahkan foreign key pada owner kolom id dari table users
   pgm.createIndex('comments', 'owner');
   pgm.createIndex('comments', 'thread_id');
 };
 
 exports.down = (pgm) => {
-  pgm.dropIndex('threads', 'owner');
-  pgm.dropTable('threads');
+  pgm.dropIndex('comments', 'owner');
+  pgm.dropIndex('comments', 'thread_id');
+  pgm.dropTable('comments');
 };

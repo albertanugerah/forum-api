@@ -1,7 +1,4 @@
 /* eslint-disable camelcase */
-
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
   pgm.createTable('threads', {
     id: {
@@ -16,16 +13,23 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
+    date: {
+      type: 'DATE',
+      notNull: true,
+      default: pgm.func('current_timestamp'),
+    },
     owner: {
       type: 'VARCHAR(50)',
       notNull: true,
+      references: '"users"',
     },
   });
 
   // menambahkan foreign key pada owner kolom id dari table users
-  pgm.addConstraint('threads', 'fk_threads.owner_users.id', 'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE');
+  pgm.createIndex('threads', 'owner');
 };
 
 exports.down = (pgm) => {
+  pgm.dropIndex('threads', 'owner');
   pgm.dropTable('threads');
 };

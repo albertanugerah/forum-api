@@ -3,22 +3,23 @@ class DetailThread {
     this._verifyPayload(payload);
 
     const {
-      id, username, date, content, isDeleted,
+      id, title, body, date, username,
     } = payload;
 
     this.id = id;
-    this.username = username;
+    this.title = title;
+    this.body = body;
     this.date = date;
-    this.content = (isDeleted) ? '**komentar telah dihapus**' : content;
+    this.username = username;
   }
 
   _verifyPayload({
-    id, username, date, content, isDeleted,
+    id, title, body, date, username,
   }) {
-    if (!id || !username || !date || !content || isDeleted === undefined) {
+    if (!id || !title || !body || !date || !username) {
       throw new Error('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
-    if (typeof id !== 'string' || typeof username !== 'string' || typeof date !== 'string' || typeof content !== 'string' || typeof isDeleted !== 'boolean') {
+    if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string' || typeof date !== 'string' || typeof username !== 'string') {
       throw new Error('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

@@ -65,32 +65,38 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('getThreadById function', () => {
-    it('should throw NotFoundError when thread not found', async () => {
-      // Arrange
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(threadRepositoryPostgres.getThreadById('thread-222'))
-        .rejects
-        .toThrowError(NotFoundError);
+    it('should throw NotFoundError if thread not available', async () => {
+      const threadRepository = new ThreadRepositoryPostgres(pool, {});
+      await expect(threadRepository.getThreadById('thread-123'))
+        .rejects.toThrow(NotFoundError);
     });
-    it('should not throw NotFoundError when thread available', async () => {
-      // Arrange
-      const id = 'thread-123';
-      const owner = 'user-123';
-      await UsersTableTestHelper.addUser({
-        id: owner,
-        username: 'dicoding',
-      });
-      await ThreadsTableTestHelper.addThread(id, {
-        title: 'ini title',
-        body: 'ini body',
-      }, owner);
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
-      // Action & Assert
-      await expect(threadRepositoryPostgres.getThreadById('thread-123'))
-        .resolves.not.toThrowError(NotFoundError);
+    it('should not throw NotFoundError if thread available', async () => {
+      const threadId = 'thread-123';
+      const owner = 'user-123';
+      const payload = {
+        id: threadId,
+        title: 'coba thread',
+        body: 'isi thread',
+        username: 'userCoba',
+      };
+
+      const threadRepository = new ThreadRepositoryPostgres(pool, {});
+      await UsersTableTestHelper.addUser({ id: owner, username: payload.username });
+      await ThreadsTableTestHelper.addThread(threadId, {
+        title: payload.title,
+        body: payload.body,
+      }, owner);
+
+      const thread = await threadRepository.getThreadById('thread-123');
+
+      await expect(threadRepository.getThreadById('thread-123'))
+        .resolves.not.toThrow(NotFoundError);
+      expect(thread).toHaveProperty('id');
+      expect(thread).toHaveProperty('title');
+      expect(thread).toHaveProperty('body');
+      expect(thread).toHaveProperty('username');
+      expect(thread).toHaveProperty('date');
     });
   });
 });
