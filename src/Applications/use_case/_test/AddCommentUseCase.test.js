@@ -1,5 +1,5 @@
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
-const CommentRepository = require('../../../Domains/comments/CommnetRepository');
+const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const AddCommentUseCase = require('../AddCommentUseCase');
 const AddComment = require('../../../Domains/comments/entities/AddComment');

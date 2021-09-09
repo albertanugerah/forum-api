@@ -47,6 +47,30 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
+  describe('getOwnerByCommentId function', () => {
+    it('should return comment owner if exist', async () => {
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+      const owner = 'user-123';
+      const threadId = 'thread-123';
+      const commentId = 'comment-123';
+
+      await UsersTableTestHelper.addUser({ id: owner });
+      await ThreadTableTestHelper.addThread(threadId, {}, owner);
+      await CommentsTableTestHelper.addComment(commentId, {}, owner, threadId);
+
+      const ownerComment = await commentRepository.getOwnerByCommentId(commentId);
+
+      await expect(commentRepository.getOwnerByCommentId(commentId))
+        .resolves.not.toThrowError(NotFoundError);
+      expect(ownerComment).toEqual(owner);
+    });
+    it('should throw NotFoundError when comment not exist', async () => {
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      await expect(commentRepository.getOwnerByCommentId('comment-123')).rejects.toThrowError(NotFoundError);
+    });
+  });
+
   describe('deleteCommentById method', () => {
     it('should deleteCommentById from database if available', async () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});

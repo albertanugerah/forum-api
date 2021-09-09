@@ -52,4 +52,31 @@ describe('/threads/{threadId}/comments endpoint', () => {
       expect(responseJson.data.addedComment).toBeDefined();
     });
   });
+  describe('when DELETE /threads/{threadId}/comments/{commentId}', () => {
+    it('should response 200', async () => {
+      const owner = 'user-123';
+      const threadId = 'thread-123';
+      const commentId = 'comment-123';
+
+      await UsersTableTestHelper.addUser({ id: owner });
+      await ThreadTableTestHelper.addThread(threadId, {}, owner);
+      await CommentTableTestHelper.addComment(commentId, {}, owner, threadId);
+
+      const server = await createServer(container);
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${threadId}/comments/${commentId}`,
+        auth: {
+          strategy: 'forum_api_jwt',
+          credentials: {
+            id: owner,
+          },
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+    });
+  });
 });
