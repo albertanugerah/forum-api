@@ -21,6 +21,32 @@ describe('DetailComment entities', () => {
     };
     expect(() => new DetailComment(payload)).toThrowError('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
+  it('should iDeleted is true', () => {
+    const payload = {
+      id: 'comment-123',
+      username: 'dicoding',
+      date: '2021-08-08T07:59:18.982Z',
+      replies: {},
+      content: 'ini dihapus',
+      isDeleted: true,
+    };
+    const detailComment = new DetailComment(payload);
+
+    expect(detailComment.content).toEqual('**komentar telah dihapus**');
+  });
+  it('should iDeleted is false', () => {
+    const payload = {
+      id: 'comment-123',
+      username: 'dicoding',
+      date: '2021-08-08T07:59:18.982Z',
+      replies: {},
+      content: 'ini komen',
+      isDeleted: false,
+    };
+    const detailComment = new DetailComment(payload);
+
+    expect(detailComment.content).toEqual('ini komen');
+  });
 
   it('should create detailComment object correctly', () => {
     const payload = {
@@ -31,12 +57,13 @@ describe('DetailComment entities', () => {
       isDeleted: false,
     };
     const {
-      id, username, date, content,
+      id, username, date, content, isDelete,
     } = new DetailComment(payload);
 
     expect(id).toEqual(payload.id);
     expect(username).toEqual(payload.username);
     expect(date).toEqual(payload.date);
     expect(content).toEqual(payload.content);
+    expect(isDelete);
   });
 });
