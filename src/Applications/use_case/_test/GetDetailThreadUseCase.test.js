@@ -7,7 +7,7 @@ describe('GetDetailThreadUseCase', () => {
   it('should orchestrating GetDetailThread Correctly', async () => {
     const threadId = 'thread-123';
 
-    const expectedDetailThread = {
+    const getThreadById = {
       id: threadId,
       title: 'ini judul',
       body: 'isi body',
@@ -33,12 +33,24 @@ describe('GetDetailThreadUseCase', () => {
       username: 'dicoding',
     }];
 
+    const arrayComment = listComment.map((comment) => {
+      const replies = listReply;
+      return {
+        ...comment,
+        replies,
+      };
+    });
+
+    const expectedDetailThread = {
+      ...getThreadById, comments: arrayComment,
+    };
+
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
     mockThreadRepository.getThreadById = jest.fn()
-      .mockImplementation(() => Promise.resolve(expectedDetailThread));
+      .mockImplementation(() => Promise.resolve(getThreadById));
 
     mockCommentRepository.getCommentByThreadId = jest.fn()
       .mockImplementation(() => Promise.resolve(listComment));
@@ -52,7 +64,8 @@ describe('GetDetailThreadUseCase', () => {
       replyRepository: mockReplyRepository,
     });
 
-    await getDetailThreadUseCase.execute(threadId);
+    const detailThread = await getDetailThreadUseCase.execute(threadId);
+    expect(detailThread).toStrictEqual(expectedDetailThread);
     expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
     expect(mockCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
   });
