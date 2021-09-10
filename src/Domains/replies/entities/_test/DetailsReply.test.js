@@ -18,6 +18,30 @@ describe('DetailsReply entities', () => {
     };
     expect(() => new DetailsReply(payload)).toThrowError('DETAILS_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
+
+  it('should print **balasan telah dihapus** if isDeleted is true', () => {
+    const payload = {
+      id: 'reply-123',
+      username: 'dicoding',
+      date: '2021-08-08T07:59:18.982Z',
+      content: 'sebuah comment',
+      isDeleted: true,
+    };
+    const detailsReply = new DetailsReply(payload);
+    expect(detailsReply.content).toEqual('**balasan telah dihapus**');
+  });
+
+  it('should print content if isDeleted is false', () => {
+    const payload = {
+      id: 'reply-123',
+      username: 'dicoding',
+      date: '2021-08-08T07:59:18.982Z',
+      content: 'sebuah comment',
+      isDeleted: false,
+    };
+    const detailsReply = new DetailsReply(payload);
+    expect(detailsReply.content).toEqual(payload.content);
+  });
   it('should create detailReply object correctly', () => {
     const payload = {
       id: 'reply-123',

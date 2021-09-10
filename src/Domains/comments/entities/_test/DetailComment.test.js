@@ -21,7 +21,7 @@ describe('DetailComment entities', () => {
     };
     expect(() => new DetailComment(payload)).toThrowError('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
-  it('should iDeleted is true', () => {
+  it('should print **komentar telah dihapus** iDeleted is true', () => {
     const payload = {
       id: 'comment-123',
       username: 'dicoding',
@@ -34,7 +34,7 @@ describe('DetailComment entities', () => {
 
     expect(detailComment.content).toEqual('**komentar telah dihapus**');
   });
-  it('should iDeleted is false', () => {
+  it('should print payload content if iDeleted is false', () => {
     const payload = {
       id: 'comment-123',
       username: 'dicoding',
@@ -45,7 +45,7 @@ describe('DetailComment entities', () => {
     };
     const detailComment = new DetailComment(payload);
 
-    expect(detailComment.content).toEqual('ini komen');
+    expect(detailComment.content).toEqual(payload.content);
   });
 
   it('should create detailComment object correctly', () => {
