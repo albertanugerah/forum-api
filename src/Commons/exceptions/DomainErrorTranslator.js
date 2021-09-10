@@ -22,6 +22,8 @@ DomainErrorTranslator._directories = {
   'CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'),
   'ADD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat komentar baru karena properti yang dibutuhkan tidak ada'),
   'ADD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat komentar baru karena tipe data tidak sesuai'),
+  'ADD_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat balasan baru karena properti yang dibutuhkan tidak ada'),
+  'ADD_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat balasan baru karena tipe data tidak sesuai'),
   'DELETE_COMMENT_USE_CASE.NOT_THE_COMMENT_OWNER': new AuthorizationError('Anda tidak memiliki hak akses untuk hapus komentar ini'),
   'DELETE_REPLY_USE_CASE.NOT_THE_REPLY_OWNER': new AuthorizationError('Anda tidak memiliki hak akses untuk hapus komentar ini'),
 
