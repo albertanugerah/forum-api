@@ -11,14 +11,12 @@ describe('a CreatedThread entities', () => {
   });
 
   it('should throw error when payload did not meet data type specification', () => {
-    // Arrange
-    const payload = {
-      id: 123,
-      title: 'ini_title',
-      owner: true,
-    };
-    // Action and Assert
-    expect(() => new CreatedThread(payload)).toThrowError('CREATED_THREAD.MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new CreatedThread({ id: 123, title: 'ini_title', owner: 'true' }))
+      .toThrowError('CREATED_THREAD.MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new CreatedThread({ id: '123', title: true, owner: 'true' }))
+      .toThrowError('CREATED_THREAD.MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new CreatedThread({ id: '123', title: 'ini_title', owner: true }))
+      .toThrowError('CREATED_THREAD.MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create createThread object correctly', () => {

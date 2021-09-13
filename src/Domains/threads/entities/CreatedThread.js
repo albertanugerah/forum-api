@@ -15,7 +15,7 @@ class CreatedThread {
       throw new Error('CREATED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string', typeof title !== 'string', typeof owner !== 'string') {
+    if (typeof id !== 'string' || typeof title !== 'string' || typeof owner !== 'string') {
       throw new Error('CREATED_THREAD.MEET_DATA_TYPE_SPECIFICATION');
     }
   }
