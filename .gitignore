@@ -2,5 +2,5 @@
 /package-lock.json
 /.idea
 /coverage
-.env
 forum-api-app-server.pem
+.env
